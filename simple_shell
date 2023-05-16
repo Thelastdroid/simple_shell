@@ -1,0 +1,45 @@
+#include <stdio.h>
+
+/**
+ * fibonacci - this function prints the fibonachi
+ * prev - Previous
+ * current - current
+ * n - the number
+ */
+
+void fibonacci(int n)
+{
+	int prev = 0, current = 1, next;
+
+	printf("Fibonacci series up to %d:\n", n);
+	printf("%d ", prev);
+
+	while (current <= n)
+	{
+		printf("%d ", current);
+		next = prev + current;
+		prev = current;
+		current = next;
+	}
+
+	printf("\n");
+}
+
+/**
+ * main - This function returns the fibonachi number
+ * scanf - traverses
+ * num - the number
+ * return - number if true
+ * else - 0
+
+int main()
+{
+    int num;
+
+    printf("Write your number: ");
+    scanf("%d", &num);
+
+    fibonacci(num);
+
+    return 0;
+}
