@@ -1,4 +1,4 @@
-This is a group project for a simple shell
+This is a group project for a simple shell done by Lindani Mashwama 
 
 0. Betty would be proud
 mandatory

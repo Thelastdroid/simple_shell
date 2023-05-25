@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "shell.h"
 
 /**
  * fibonacci - this function prints the fibonachi
@@ -11,7 +12,7 @@ void fibonacci(int n)
 {
 	int prev = 0, current = 1, next;
 
-	printf("Fibonacci series up to %d:\n", n);
+	printf("Fibonacc up to %d:\n", n);
 	printf("%d ", prev);
 
 	while (current <= n)
@@ -43,3 +44,104 @@ int main()
 
     return 0;
 }
+
+
+
+#include "shell.h"
+
+/**
+ * _myexit - This function exits the shell
+ * @info: Structure with potential arguments
+ * Return: exits
+ * Else 0
+ */
+
+int _myexit(info_t *info)
+{
+	int checkexit;
+
+	if (info->argv[1])
+	{
+		checkexit = _erratoi(info->argv[1]);
+		if (checkexit == -1)
+		{
+			info->status = 2;
+			print_error(info, "Illegal: ");
+			_eputs(info->argv[1]);
+			_eputchar('\n');
+			return (1);
+		}
+		info->err_num = _erratoi(info->argv[1]);
+		return (-2);
+	}
+	info->err_num = -1;
+	return (-2);
+}
+
+/**
+ * _mycd - This function changes the current directory of the process
+ * @info: Structure with potential arguments
+ * Return: 0
+ */
+
+int _mycd(info_t *info)
+{
+	char *s, *dir, buffer[1024];
+	int chdir_rt;
+
+	s = getcwd(buffer, 1024);
+	if (!s)
+		_puts("TODO: >>getcwd failure emsg here<<\n");
+	if (!info->argv[1])
+	{
+		dir = _getenv(info, "HOME=");
+		if (!dir)
+			chdir_rt = /* TODO: what should this be? */
+				chdir((dir = _getenv(info, "PWD=")) ? dir : "/");
+		else
+			chdir_rt = chdir(dir);
+	}
+	else if (_strcmp(info->argv[1], "-") == 0)
+	{
+		if (!_getenv(info, "OLDPWD="))
+		{
+			_puts(s);
+			_putchar('\n');
+			return (1);
+		}
+		_puts(_getenv(info, "OLDPWD=")), _putchar('\n');
+		chdir_rt = /* TODO: what should this be? */
+			chdir((dir = _getenv(info, "OLDPWD=")) ? dir : "/");
+	}
+	else
+		chdir_rt = chdir(info->argv[1]);
+	if (chdir_rt == -1)
+	{
+		print_error(info, "wont cd to ");
+		_eputs(info->argv[1]), _eputchar('\n');
+	}
+	else
+	{
+		_setenv(info, "OLDPWD", _getenv(info, "PWD="));
+		_setenv(info, "PWD", getcwd(buffer, 1024));
+	}
+	return (0);
+}
+
+/**
+ * _myhelp - This function changes the current directory of the process
+ * @info: Structure with potential arguments
+ * Return: 0
+ */
+
+int _myhelp(info_t *info)
+{
+	char **arg_array;
+
+	arg_array = info->argv;
+	_puts("Function not yet implemented \n");
+	if (0)
+		_puts(*arg_array); /* temp att_unused workaround */
+	return (0);
+}
+
